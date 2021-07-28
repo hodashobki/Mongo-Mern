@@ -1,0 +1,82 @@
+1-Create a database called 'my_first_db'.
+ use my_first_db
+switched to db my_first_db
+
+2-Create students collection.
+db.createCollection("students");
+
+3-Each document you insert into this collection should have the following format: ({name: STRING, home_state: STRING, lucky_number: NUMBER, birthday: {month: NUMBER, day: NUMBER, year: NUMBER}})
+> db.students.insert({name:"Ahmad",lucky_number:10,birthday:{month:10,day:27,year:2011}});
+WriteResult({ "nInserted" : 1 })
+
+4-Create 5 students with the appropriate info.
+> db.students.insert({name:"Mohammad",lucky_number:4,birthday:{month:4,day:1,year:2019}});
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Mohammad Adnan",lucky_number:9,birthday:{month:9,day:1,year:2020}});
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Fatema",lucky_number:10,birthday:{month:10,day:1,year:2014}});
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Adam",lucky_number:11,birthday:{month:11,day:1,year:2021}});
+WriteResult({ "nInserted" : 1 })
+
+5-Get all students.
+
+> db.students.find();
+{ "_id" : ObjectId("6100cc81c5980a1fcc07ab2c"), "name" : "Ahmad", "lucky_number" : 10, "birthday" : { "month" : 10, "day" : 27, "year" : 2011 } }
+{ "_id" : ObjectId("6100ce6fc5980a1fcc07ab2d"), "name" : "Mohammad", "lucky_number" : 4, "birthday" : { "month" : 4, "day" : 1, "year" : 2019 } }
+{ "_id" : ObjectId("6100ced2c5980a1fcc07ab2e"), "name" : "Mohammad Adnan", "lucky_number" : 9, "birthday" : { "month" : 9, "day" : 1, "year" : 2020 } }
+{ "_id" : ObjectId("6100cf0bc5980a1fcc07ab2f"), "name" : "Fatema", "lucky_number" : 10, "birthday" : { "month" : 10, "day" : 1, "year" : 2014 } }
+{ "_id" : ObjectId("6100cf45c5980a1fcc07ab30"), "name" : "Adam", "lucky_number" : 11, "birthday" : { "month" : 11, "day" : 1, "year" : 2021 } }
+
+6-Get all students whose lucky number is greater than 3
+er" : 11, "birthday" : { "month" : 11, "day" : 1, "year" : 2021 } }
+> db.students.find({lucky_number:{'$gt':3}});
+{ "_id" : ObjectId("6100cc81c5980a1fcc07ab2c"), "name" : "Ahmad", "lucky_number" : 10, "birthday" : { "month" : 10, "day" : 27, "year" : 2011 } }
+{ "_id" : ObjectId("6100ce6fc5980a1fcc07ab2d"), "name" : "Mohammad", "lucky_number" : 4, "birthday" : { "month" : 4, "day" : 1, "year" : 2019 } }
+{ "_id" : ObjectId("6100ced2c5980a1fcc07ab2e"), "name" : "Mohammad Adnan", "lucky_number" : 9, "birthday" : { "month" : 9, "day" : 1, "year" : 2020 } }
+{ "_id" : ObjectId("6100cf0bc5980a1fcc07ab2f"), "name" : "Fatema", "lucky_number" : 10, "birthday" : { "month" : 10, "day" : 1, "year" : 2014 } }
+{ "_id" : ObjectId("6100cf45c5980a1fcc07ab30"), "name" : "Adam", "lucky_number" : 11, "birthday" : { "month" : 11, "day" : 1, "year" : 2021 } }
+
+7-Get all students whose lucky number is less than or equal to 10
+db.students.find({lucky_number:{'$gte':10}});
+{ "_id" : ObjectId("6100cc81c5980a1fcc07ab2c"), "name" : "Ahmad", "lucky_number" : 10, "birthday" : { "month" : 10, "day" : 27, "year" : 2011 } }
+{ "_id" : ObjectId("6100cf0bc5980a1fcc07ab2f"), "name" : "Fatema", "lucky_number" : 10, "birthday" : { "month" : 10, "day" : 1, "year" : 2014 } }
+{ "_id" : ObjectId("6100cf45c5980a1fcc07ab30"), "name" : "Adam", "lucky_number" : 11, "birthday" : { "month" : 11, "day" : 1, "year" : 2021 } }
+
+8-Get all students whose lucky number is between 1 and 9 (inclusive)
+db.students.find({lucky_number:{$gte:1,$lte:9}})
+{ "_id" : ObjectId("6100ce6fc5980a1fcc07ab2d"), "name" : "Mohammad", "lucky_number" : 4, "birthday" : { "month" : 4, "day" : 1, "year" : 2019 } }
+{ "_id" : ObjectId("6100ced2c5980a1fcc07ab2e"), "name" : "Mohammad Adnan", "lucky_number" : 9, "birthday" : { "month" : 9, "day" : 1, "year" : 2020 } }
+
+9-Add a field to each student collection called 'interests' that is an ARRAY. It should contain the following entries: 'coding', 'brunch', 'MongoDB'. Do this in ONE operation.
+> db.students.updateMany({},{$set:{interests:["coding","brunch","MongoDB"]}})
+{ "acknowledged" : true, "matchedCount" : 5, "modifiedCount" : 4 }
+
+10-Add some unique interests for each particular student into each of their interest arrays.
+db.students.update({name:"Ahmad"},{$push:{interests:'reading'}})
+db.students.update({name:"Mohammad"},{$push:{interests:'football'}})
+db.students.update({name:"Mohammad Adnan"},{$push:{interests:'taxes'}})
+db.students.update({name:"Fatema"},{$push:{interests:'swimming'}})
+db.students.update({name:"Adam"},{$push:{interests:'writing'}})
+
+11-Remove the 'taxes' interest you just added.
+db.students.update({name:"Mohammad"},{$pull:{interests:'football'}})
+
+12-Remove a student by name.
+db.students.deleteOne({name: "Ahmad"}) 
+13-
+db.students.deleteOne({lucky_number:{$gte:5}},true)
+
+14-Add a field to each student collection called 'number_of_belts' and set it to 0.
+db.students.updateMany({},{$set:{number_of_belts:0}})
+
+15- db.students.update({name:"Ahmad Adnan"},{$inc:{number_of_belts:1}})
+16- db.students.updateMany({},{$unset:{lucky_number:""}})
+17- db.students.updateMany({},{$currentDate:{updated_on:{$type:"date"}}})
+
+
+
+
+
+
+11-
